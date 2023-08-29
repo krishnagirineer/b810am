@@ -4,6 +4,9 @@ node {
       git url: 'https://github.com/kesavkummari/b810am.git', branch: 'jira2023aug'
       mvnHome = tool 'maven'
    }
+  stage ('Code Scanning') {
+      sh "'${mvnHome}/bin/mvn' sonar:sonar"
+  }
   stage ('Clean') {
       sh "'${mvnHome}/bin/mvn' clean"
   }
