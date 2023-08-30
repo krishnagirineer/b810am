@@ -4,9 +4,9 @@ node {
       git url: 'https://github.com/kesavkummari/b810am.git', branch: 'jira2023aug'
       mvnHome = tool 'maven'
    }
-//   stage ('Code Scanning') {
-//       sh "'${mvnHome}/bin/mvn' sonar:sonar"
-//   }
+  stage ('Code Scanning') {
+      sh "'${mvnHome}/bin/mvn' sonar:sonar"
+  }
   stage ('Clean') {
       sh "'${mvnHome}/bin/mvn' clean"
   }
@@ -28,7 +28,13 @@ node {
   stage ('Package') {
       sh "'${mvnHome}/bin/mvn' package"
   }
-  stage ('Package') {
+  stage ('Deploy') {
       sh "'${mvnHome}/bin/mvn' deploy"
+  }
+  stage ('Deliver & Deployment') {
+      sh 'curl -u admin:redhat@123 -T target/**.war "http://107.20.71.148:8080/manager/text/deploy?path=/devops&update=true"'
+  }
+  stage ('SmokeTest') {
+      sh 'curl --retry-delay 10 --retry 5 "http://107.20.71.148:8080/devops"'
   }
 }
